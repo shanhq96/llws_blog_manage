@@ -1,0 +1,11 @@
+python3.
+flask
+pymongo
+flask-assets
+jsmin
+cssmin
+flask-login
+flask-wtf
+
+#Test
+Flask-DebugToolbar

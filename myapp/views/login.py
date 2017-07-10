@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, redirect, url_for, render_template
 
 # from forms.login_forms import EmailPasswordForm
+from util.post_response import get_return_response
 
 login = Blueprint("login", __name__)
 
@@ -28,7 +29,6 @@ def check_login():
     passwd = form.get('passwd')
     flag = username == "shq" and passwd == "123456"
     # 查询数据库中的用户名密码是否一致
-    from llws_blog_manage import get_return_response
     response = get_return_response(
         jsonify({"status": flag, "data": {"username": username}}))
     return response

@@ -2,6 +2,7 @@ from flask import Flask, redirect
 
 from views.login import login
 from views.index import index
+from views.blog_manage import blog_manage
 
 # [...] Initialize the app
 from flask_login import login_required, current_user
@@ -29,6 +30,7 @@ def to_login():
 def run():
     app.register_blueprint(login, url_prefix='/login')
     app.register_blueprint(index, url_prefix='/index')
+    app.register_blueprint(blog_manage, url_prefix='/blog_manage')
     app.run(host='0.0.0.0', debug=app.config['DEBUG'])
 
 if __name__ == '__main__':

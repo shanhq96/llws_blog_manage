@@ -8,3 +8,7 @@ index = Blueprint("index", __name__)
 # @login_required
 def to_index():
     return render_template("index.html")
+
+@index.route('/to_welcome')
+def to_welcome():
+    return render_template("welcome/welcome.html")

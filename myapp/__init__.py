@@ -1,4 +1,4 @@
-from flask import Flask, render_template, make_response, redirect, url_for
+from flask import Flask, redirect
 
 from views.login import login
 from views.index import index
@@ -23,21 +23,14 @@ app.config.from_pyfile('config.py')  # 从instance文件夹中加载配置
 
 @app.route('/')
 def to_login():
-    # return redirect(url_for('login.to_login'))
-    return render_template("login.html")
+    return redirect('login')
+    #return render_template("login.html")
 
-
-def get_return_response(data2return):
-    # 获取封装着返回数据的response
-    response = make_response(data2return)
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Methods'] = 'POST'
-    response.headers['Access-Control-Allow-Headers'] = 'x-requested-with,content-type'
-    return response
-
-
-if __name__ == '__main__':
+def run():
     app.register_blueprint(login, url_prefix='/login')
     app.register_blueprint(index, url_prefix='/index')
     app.run(host='0.0.0.0', debug=app.config['DEBUG'])
+
+if __name__ == '__main__':
+    run()
     # app.run(host='0.0.0.0', debug=True)

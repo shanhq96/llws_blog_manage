@@ -67,7 +67,7 @@ def to_blog_add():
     return render_template("blog_manage/article-add.html")
 
 
-@blog_manage.route('/save_blog', methods=['POST','GET' ])
+@blog_manage.route('/save_blog', methods=['POST', 'GET'])
 def save_blog():
     """
     保存博客
@@ -87,12 +87,12 @@ def save_blog():
     info['content'] = content  # 内容
     info['describe'] = maincontent  # 概要
     info['is_status'] = 0  # 0未发布
-    info['create_time'] = time.time()#创建时间
-    info['title_img_url'] = ''#标题图片
-    info['hits'] = 0#点击次数
-    info['is_top'] = 'false'#是否置顶
+    info['create_time'] = time.time()  # 创建时间
+    info['title_img_url'] = ''  # 标题图片
+    info['hits'] = 0  # 点击次数
+    info['is_top'] = 'false'  # 是否置顶
     print(info['create_time'], info['title'])
-    connection.insert_list(blog_collection,info)
+    connection.insert_list(blog_collection, info)
 
     response = get_return_response(jsonify({"status": 1}))
     return response

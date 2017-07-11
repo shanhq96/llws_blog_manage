@@ -20,23 +20,23 @@
 		<input type="text" name="" id="" placeholder=" 资讯名称" style="width:250px" class="input-text">
 		<button name="" id="" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜资讯</button>
 	</div>
-	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a class="btn btn-primary radius"  data-href="{{ url_for('blog_manage.to_blog_add') }}" data-title="添加博客" onclick="Hui_admin_tab(this)" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加博客</a></span> <span class="r">共有数据：<strong id="totalnum">0</strong> 条</span> </div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l">
+            <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+            <a href="javascript:;" onclick="data_add()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加标签</a></span>
+        </span>
+        <span class="r">共有数据：<strong id="totalnum">0</strong> 条</span>
+    </div>
 	<div class="mt-20">
 		<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
 			<thead>
 				<tr class="text-c">
 					<th width="25"><input type="checkbox" name="" value=""></th>
 					<th width="80">ID</th>
-					<th>标题</th>
-					<th width="80">描述</th>
-					<th width="80">大标签</th>
-                    <th width="80">小标签</th>
-                    <th width="80">url</th>
+					<th width="80">标签名称</th>
+					<th width="80">标签类别</th>
                     <th width="120">创建时间</th>
 					<th width="120">更新时间</th>
-					<th width="75">点击量</th>
-					<th width="60">置顶状态</th>
-                    <th width="60">状态</th>
 					<th width="120">操作</th>
 				</tr>
 			</thead>
@@ -209,16 +209,10 @@
                     "defaultContent": ""
                 },
                 {"data": "_id"},
-                {"data": "title"},
-                {"data": "describe"},
-                {"data": "big_label"},
-                {"data": "small_label"},
-                {"data": "url"},
+                {"data": "label_name"},
+                {"data": "label_type"},
                 {"data": "create_time"},
                 {"data": "update_time"},
-                {"data": "hits"},
-                {"data": "is_top"},
-                {"data": "is_status"},
                 {
                     "orderable": false,
                     "data": "_id",
@@ -226,7 +220,7 @@
                 }
             ],
             "ajax": $.fn.dataTable.pipeline({
-                "url": 'get_blog_manage_list?now=' + new Date().getTime(),
+                "url": 'get_blog_label_manage_list?now=' + new Date().getTime(),
                 "method": "post",
                 "data":{},
                 "pages": 5 // number of pages to cache
@@ -353,6 +347,14 @@
         layer.msg('已提交申请，耐心等待审核!', {icon: 1, time: 2000});
     }
 
+    //添加标签
+    function data_add(){
+        var title = '添加标签';
+        var url = 'to_blog_laebl_manage_add';
+        var w = '';
+        var h = '';
+        layer_show(title,url,w,h);
+    }
 </script>
 </body>
 </html>

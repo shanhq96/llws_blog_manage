@@ -6,6 +6,8 @@ jsmin
 cssmin
 flask-login
 flask-wtf
+#uedutor
+uploader
 
 #Test
 Flask-DebugToolbar

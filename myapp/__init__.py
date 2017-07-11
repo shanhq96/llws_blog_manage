@@ -1,9 +1,10 @@
-from flask import Flask, redirect
+from flask import Flask, redirect, render_template
 
 from views.login import login
 from views.index import index
 from views.blog_manage import blog_manage
 from views.comment_mange import comment_manage
+from util.ueditor_server import ueditor_server
 # [...] Initialize the app
 from flask_login import login_required, current_user
 
@@ -25,14 +26,22 @@ app.config.from_pyfile('config.py')  # 从instance文件夹中加载配置
 @app.route('/')
 def to_login():
     return redirect('login')
-    #return render_template("login.html")
+    # return render_template("login.html")
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
 
 def run():
     app.register_blueprint(login, url_prefix='/login')
     app.register_blueprint(index, url_prefix='/index')
     app.register_blueprint(blog_manage, url_prefix='/blog_manage')
     app.register_blueprint(comment_manage, url_prefix='/comment_manage')
+    app.register_blueprint(ueditor_server, url_prefix='/ueditor_server')
     app.run(host='0.0.0.0', debug=app.config['DEBUG'])
+
 
 if __name__ == '__main__':
     run()

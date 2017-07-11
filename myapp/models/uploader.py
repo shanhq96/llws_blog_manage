@@ -8,6 +8,8 @@ import urllib
 import datetime
 from flask import url_for
 from werkzeug.utils import secure_filename
+
+
 class Uploader:
     stateMap = [  # 上传状态映射表，国际化用户需考虑此处数据的国际化
         "SUCCESS",  # 上传成功标记，在UEditor中内不可改变，否则flash判断会出错

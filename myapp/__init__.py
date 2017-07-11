@@ -3,7 +3,7 @@ from flask import Flask, redirect
 from views.login import login
 from views.index import index
 from views.blog_manage import blog_manage
-from views.blog_add import blog_add
+from views.comment_mange import comment_manage
 # [...] Initialize the app
 from flask_login import login_required, current_user
 
@@ -31,7 +31,7 @@ def run():
     app.register_blueprint(login, url_prefix='/login')
     app.register_blueprint(index, url_prefix='/index')
     app.register_blueprint(blog_manage, url_prefix='/blog_manage')
-    app.register_blueprint(blog_add, url_prefix='/blog_add')
+    app.register_blueprint(comment_manage, url_prefix='/comment_manage')
     app.run(host='0.0.0.0', debug=app.config['DEBUG'])
 
 if __name__ == '__main__':

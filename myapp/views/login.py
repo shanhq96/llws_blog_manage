@@ -29,6 +29,5 @@ def check_login():
     passwd = form.get('passwd')
     flag = username == "shq" and passwd == "123456"
     # 查询数据库中的用户名密码是否一致
-    response = get_return_response(
-        jsonify({"status": flag, "data": {"username": username}}))
+    response = get_return_response(jsonify({"status": flag, "data": {"username": username}}))
     return response

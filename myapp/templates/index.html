@@ -153,10 +153,8 @@
         <dl id="menu-system">
             <dt><i class="Hui-iconfont">&#xe62e;</i> 博客管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
-                <li>
+                <ul>
                     <li><a data-href="{{ url_for('blog_manage.to_blog_manage') }}" data-title="博客管理" href="javascript:void(0)">博客管理</a></li>
-                </ul>
-                 <ul>
                     <li><a data-href="{{ url_for('blog_manage.to_blog_label_manage') }}" data-title="博客标签管理" href="javascript:void(0)">博客标签管理</a></li>
                 </ul>
             </dd>
@@ -195,7 +193,7 @@
 </div>
 {{ footer() }}
 <!--请在下方写此页面业务相关的脚本-->
-<script type="text/javascript" src="{{ url_for('static',filename='h-ui.admin/lib/jquery.contextmenu/jquery.contextmenu.r2.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='lib/h-ui.admin/lib/jquery.contextmenu/jquery.contextmenu.r2.js') }}"></script>
 <script type="text/javascript">
     $(function () {
         /*$("#min_title_list li").contextMenu('Huiadminmenu', {

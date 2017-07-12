@@ -21,10 +21,10 @@ class ConnectMongoDB():
         print('向%s中插入数据%s' % (collection.name, list2save))
         return collection.insert(list2save)
 
-    def update_data(self, collection, condition, newData):
+    def update_data(self, collection, condition, newData,upsert=False,multi=False):
         """根据条件更新表中数据"""
         print('更新%s中数据;条件:%s;新数据:%s' % (collection, condition, newData))
-        return collection.update(condition, newData)
+        return collection.update(condition, newData,upsert=upsert,multi=multi)
 
     def find_data(self, collection, condition={}):
         """根据条件筛选数据库"""

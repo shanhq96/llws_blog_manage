@@ -1,4 +1,4 @@
-﻿{% from '_common.html' import login_head %}
+﻿{% from '_common.html' import login_head,login_footer %}
 {{ login_head() }}
     <title>后台登录 - H-ui.admin v3.0</title>
     <meta name="keywords" content="H-ui.admin v3.0,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
@@ -47,11 +47,8 @@
     </div>
 </div>
 <div class="footer">Copyright 你的公司名称 by H-ui.admin v3.0</div>
-
-<script type="text/javascript" src="{{ url_for('static', filename='h-ui.admin/lib/jquery/1.9.1/jquery.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='h-ui.admin/static/h-ui/js/H-ui.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='llws.blog/login/login.js') }}"></script>
-
+{{ login_footer }}
+<script type="text/javascript" src="{{ url_for('static', filename='lib/llws.blog/login/login.js') }}"></script>
 <!--此乃百度统计代码，请自行删除-->
 <script>
     var _hmt = _hmt || [];

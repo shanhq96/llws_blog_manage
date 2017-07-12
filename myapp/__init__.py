@@ -31,6 +31,20 @@ def to_login():
 
 @app.errorhandler(404)
 def page_not_found(e):
+    """
+    url错误,去404页面
+    :param e:
+    :return:
+    """
+    return redirect('404'), 404
+
+
+@app.route('/404')
+def to_404():
+    """
+    去404页面
+    :return:
+    """
     return render_template('404.html'), 404
 
 

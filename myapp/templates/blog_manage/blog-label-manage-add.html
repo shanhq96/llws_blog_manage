@@ -6,62 +6,20 @@
 </head>
 <body>
 <article class="page-container">
-	<form class="form form-horizontal" id="form">
+	<form class="form form-horizontal" id="form" action="/blog_manage/save_blog_label" method="post">
+        <div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>大标签：</label>
+			<div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+				<select class="select" size="1" name="parent_label" id="parent_label" datatype="*" nullmsg="请选择大标签">
+					<option value="0@0" selected>添加新的大标签</option>
+				</select>
+				</span>
+            </div>
+		</div>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>标签名称：</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<input type="text" class="input-text" value="" placeholder="请输入标签名称" id="label_name" name="label_name" datatype="*2-10" nullmsg="请输入标签名称" errormsg="请控制在2-10字符">
-			</div>
-		</div>
-		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>标签类别：</label>
-			<div class="formControls col-xs-8 col-sm-9 skin-minimal">
-				<div class="radio-box">
-					<input name="label_type" type="radio" id="label_type-1" checked>
-					<label for="label_type-1">大标签</label>
-				</div>
-				<div class="radio-box">
-                    <input name="label_type" type="radio" id="label_type-2">
-					<label for="label_type-2">小标签</label>
-				</div>
-			</div>
-		</div>
-		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>手机：</label>
-			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="mobile" name="mobile">
-			</div>
-		</div>
-		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>邮箱：</label>
-			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" placeholder="@" name="email" id="email">
-			</div>
-		</div>
-		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3">附件：</label>
-			<div class="formControls col-xs-8 col-sm-9"> <span class="btn-upload form-group">
-				<input class="input-text upload-url" type="text" name="uploadfile" id="uploadfile" readonly nullmsg="请添加附件！" style="width:200px">
-				<a href="javascript:void();" class="btn btn-primary radius upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
-				<input type="file" multiple name="file-2" class="input-file">
-				</span> </div>
-		</div>
-		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3">所在城市：</label>
-			<div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
-				<select class="select" size="1" name="city">
-					<option value="" selected>请选择城市</option>
-					<option value="1">北京</option>
-					<option value="2">上海</option>
-					<option value="3">广州</option>
-				</select>
-				</span> </div>
-		</div>
-		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3">备注：</label>
-			<div class="formControls col-xs-8 col-sm-9">
-				<textarea name="beizhu" cols="" rows="" class="textarea"  placeholder="说点什么...最少输入10个字符" onKeyUp="$.Huitextarealength(this,100)"></textarea>
-				<p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
 			</div>
 		</div>
 		<div class="row cl">
@@ -74,8 +32,8 @@
 
 {{ footer() }}
 <!--请在下方写此页面业务相关的脚本-->
-<script type="text/javascript" src="{{ url_for('static',filename='h-ui.admin/lib/My97DatePicker/4.8/WdatePicker.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static',filename='Validform-5.3.2/Validform_v5.3.2.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='lib/h-ui.admin/lib/My97DatePicker/4.8/WdatePicker.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='lib/Validform-5.3.2/Validform_v5.3.2.js') }}"></script>
 <script type="text/javascript">
     $(function () {
         $('.skin-minimal input').iCheck({
@@ -83,7 +41,7 @@
             radioClass: 'iradio-blue',
             increaseArea: '20%'
         });
-
+        getBigBlogLabelList();
     });
     //验证表单
     var form = $('#form').Validform({
@@ -131,7 +89,8 @@
                 if (data.status == "success") {
                     layer.msg('提交成功', {icon: 1});
                     setTimeout(function () {
-
+                        parent.dataTableObj.api().draw();
+                        layer_close();
                     }, 1000);
                 } else{
                     console.log(data.status)
@@ -142,7 +101,33 @@
             }
         })
     }
-</script> 
+
+    //异步获取大标签列表
+    function getBigBlogLabelList() {
+        $.ajax({
+            type: "post",
+            url: "/blog_manage/get_big_blog_label_list",
+            data: {},
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded;charset=utf-8",
+            success: function (data) {
+                if (data.status == "success") {
+                    var str = "";
+                    for(var i=0;i<data.big_blog_labels.length;i++){
+                        var temp_big_blog_label = data.big_blog_labels[i];
+                        str += '<option value="'+temp_big_blog_label._id+'@'+temp_big_blog_label.label_name+'">'+temp_big_blog_label.label_name+'</option>\n';
+                    }
+                    $('#parent_label').append(str);
+                } else{
+                    console.log(data.status)
+                }
+            },
+            error: function (data) {
+                alert("error = " + data.msg);
+            }
+        })
+    }
+</script>
 <!--/请在上方写此页面业务相关的脚本-->
 </body>
 </html>

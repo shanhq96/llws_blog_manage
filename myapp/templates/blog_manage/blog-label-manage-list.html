@@ -71,202 +71,87 @@
 {{ footer() }}
 
 <!--请在下方写此页面业务相关的脚本-->
-<script type="text/javascript" src="{{ url_for('static',filename='h-ui.admin/lib/My97DatePicker/4.8/WdatePicker.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static',filename='DataTables-1.10.15/media/js/jquery.dataTables.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static',filename='h-ui.admin/lib/laypage/1.2/laypage.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='lib/h-ui.admin/lib/My97DatePicker/4.8/WdatePicker.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='lib/DataTables-1.10.15/media/js/jquery.dataTables.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='lib/DataTables-1.10.15/pipeline/pipeline.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='lib/h-ui.admin/lib/laypage/1.2/laypage.js') }}"></script>
 <script type="text/javascript">
-    //
-    // Pipelining function for DataTables. To be used to the `ajax` option of DataTables
-    //
-    $.fn.dataTable.pipeline = function (opts) {
-        // Configuration options
-        var conf = $.extend({
-            pages: 5,     // number of pages to cache
-            url: '',      // script url
-            data: null,   // function or object with parameters to send to the server
-                          // matching how `ajax.data` works in DataTables
-            method: 'GET' // Ajax HTTP method
-        }, opts);
-
-        // Private variables for storing the cache
-        var cacheLower = -1;
-        var cacheUpper = null;
-        var cacheLastRequest = null;
-        var cacheLastJson = null;
-
-        return function (request, drawCallback, settings) {
-            var ajax = false;
-            var requestStart = request.start;
-            var drawStart = request.start;
-            var requestLength = request.length;
-            var requestEnd = requestStart + requestLength;
-
-            if (settings.clearCache) {
-                // API requested that the cache be cleared
-                ajax = true;
-                settings.clearCache = false;
+    var dataTableObj = $('.table-sort').dataTable({
+        "language": {//
+            "url": '{{ url_for('static',filename='lib/DataTables-1.10.15/lang/Chinese.json') }}'
+        },
+        "order": [[1, "desc"]],//默认第几个排序
+        "stateSave": false,//状态保存
+        "pading": false,
+        "processing": true,
+        "serverSide": true, //是否启动服务器端数据导入
+        "bFilter": false,
+        "columns": [
+            {
+                "orderable": false,
+                "data": "_id",
+                "defaultContent": ""
+            },
+            {"data": "_id"},
+            {"data": "label_name"},
+            {"data": "label_type"},
+            {"data": "parent_label_name"},
+            {"data": "create_time"},
+            {"data": "update_time"},
+            {
+                "orderable": false,
+                "data": "_id",
+                "defaultContent": ""
             }
-            else if (cacheLower < 0 || requestStart < cacheLower || requestEnd > cacheUpper) {
-                // outside cached data - need to make a request
-                ajax = true;
-            }
-            else if (JSON.stringify(request.order) !== JSON.stringify(cacheLastRequest.order) ||
-                JSON.stringify(request.columns) !== JSON.stringify(cacheLastRequest.columns) ||
-                JSON.stringify(request.search) !== JSON.stringify(cacheLastRequest.search)
-            ) {
-                // properties changed (ordering, columns, searching)
-                ajax = true;
-            }
-
-            // Store the request for checking next time around
-            cacheLastRequest = $.extend(true, {}, request);
-
-            if (ajax) {
-                // Need data from the server
-                if (requestStart < cacheLower) {
-                    requestStart = requestStart - (requestLength * (conf.pages - 1));
-
-                    if (requestStart < 0) {
-                        requestStart = 0;
-                    }
+        ],
+        "ajax": $.fn.dataTable.pipeline({
+            "url": 'get_blog_label_manage_list?now=' + new Date().getTime(),
+            "method": "post",
+            "data": {},
+            "pages": 5 // number of pages to cache
+        }),
+        "createdRow": function (row, data, index) {
+            $(row).attr("class", "text-c");
+            //行创建回调,优于行绘制回调
+            {#if (data[5].replace(/[\$,]/g, '') * 1 > 4000) {
+                $('td', row).eq(5).css('font-weight', "bold").css("color", "red");
+            }#}
+        },
+        "rowCallback": function (row, data, index) {
+            //行绘制回调
+        },
+        "columnDefs": [//列渲染
+            {
+                "targets": [0],
+                "render": function (data, type, row) {
+                    //获取其他列数据用row[index]
+                    var str = '<input type="checkbox" value="' + data + '" name="">';
+                    return str;
                 }
-
-                cacheLower = requestStart;
-                cacheUpper = requestStart + (requestLength * conf.pages);
-
-                request.start = requestStart;
-                request.length = requestLength * conf.pages;
-
-                // Provide the same `data` options as DataTables.
-                if ($.isFunction(conf.data)) {
-                    // As a function it is executed with the data object as an arg
-                    // for manipulation. If an object is returned, it is used as the
-                    // data object to submit
-                    var d = conf.data(request);
-                    if (d) {
-                        $.extend(request, d);
-                    }
+            },
+            {
+                "targets": [1],
+                "visible": false
+            },
+            {
+                "targets": [-1],
+                "render": function (data, type, row) {
+                    //获取其他列数据用row[index]
+                    var str = '<a style="text-decoration:none" class="ml-5" onClick="delete_blog_label(this,\'' + data + '\')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>';
+                    return str;
                 }
-                else if ($.isPlainObject(conf.data)) {
-                    // As an object, the data given extends the default
-                    $.extend(request, conf.data);
-                }
-
-                settings.jqXHR = $.ajax({
-                    "type": conf.method,
-                    "url": conf.url,
-                    "data": request,
-                    "dataType": "json",
-                    "cache": false,
-                    "success": function (json) {
-                        cacheLastJson = $.extend(true, {}, json);
-
-                        if (cacheLower != drawStart) {
-                            json.data.splice(0, drawStart - cacheLower);
-                        }
-                        if (requestLength >= -1) {
-                            json.data.splice(requestLength, json.data.length);
-                        }
-
-                        drawCallback(json);
-                    }
-                });
             }
-            else {
-                json = $.extend(true, {}, cacheLastJson);
-                json.draw = request.draw; // Update the echo for each response
-                json.data.splice(0, requestStart - cacheLower);
-                json.data.splice(requestLength, json.data.length);
-
-                drawCallback(json);
-            }
-        }
-    };
-
-    // Register an API method that will empty the pipelined data, forcing an Ajax
-    // fetch on the next draw (i.e. `table.clearPipeline().draw()`)
-    $.fn.dataTable.Api.register('clearPipeline()', function () {
-        return this.iterator('table', function (settings) {
-            settings.clearCache = true;
-        });
+        ]
+    });
+    $(dataTableObj).on('xhr.dt', function (e, settings, json, xhr) {
+        //绑定xhr事件,在向服务器发送ajax请求并完成时执行
+        $('#totalnum').html(json.recordsTotal);//总数
     });
 </script>
 <script type="text/javascript">
     $(function () {
-        var dataTableObj = $('.table-sort').dataTable({
-            "language": {
-                "url": '{{ url_for('static',filename='DataTables-1.10.15/lang/Chinese.json') }}'
-            },
-            "order": [[1, "desc"]],//默认第几个排序
-            "stateSave": false,//状态保存
-            "pading": false,
-            "processing": true,
-            "serverSide": true, //是否启动服务器端数据导入
-            "bFilter": false,
-            "columns": [
-                {
-                    "orderable": false,
-                    "data": "_id",
-                    "defaultContent": ""
-                },
-                {"data": "_id"},
-                {"data": "label_name"},
-                {"data": "label_type"},
-                {"data": "parent_label_name"},
-                {"data": "create_time"},
-                {"data": "update_time"},
-                {
-                    "orderable": false,
-                    "data": "_id",
-                    "defaultContent": ""
-                }
-            ],
-            "ajax": $.fn.dataTable.pipeline({
-                "url": 'get_blog_label_manage_list?now=' + new Date().getTime(),
-                "method": "post",
-                "data":{},
-                "pages": 5 // number of pages to cache
-            }),
-            "createdRow": function (row, data, index) {
-                $(row).attr("class","text-c")
-                //行创建回调,优于行绘制回调
-                {#if (data[5].replace(/[\$,]/g, '') * 1 > 4000) {
-                    $('td', row).eq(5).css('font-weight', "bold").css("color", "red");
-                }#}
-            },
-            "rowCallback": function (row, data, index) {
-                //行绘制回调
-            },
-            "columnDefs": [//列渲染
-                {
-                    "targets": [0],
-                    "render": function (data, type, row) {
-                        //获取其他列数据用row[index]
-                        var str = '<input type="checkbox" value="' + data + '" name="">';
-                        return str;
-                    }
-                },
-                {
-                    "targets": [1],
-                    "visible": false
-                },
-                {
-                    "targets": [-1],
-                    "render": function (data, type, row) {
-                        //获取其他列数据用row[index]
-                        var str = '<a style="text-decoration:none" class="ml-5" onClick="blog_del(this,\''+data+'\')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>';
-                        return str;
-                    }
-                }
-            ]
-        });
-        $(dataTableObj).on('xhr.dt', function (e, settings, json, xhr) {
-            //绑定xhr事件,在向服务器发送ajax请求并完成时执行
-            $('#totalnum').html(json.recordsTotal);//总数
-        });
+
     });
-</script>
-<script type="text/javascript">
     /*资讯-添加*/
     function article_add(title, url, w, h) {
         var index = layer.open({
@@ -286,14 +171,15 @@
         layer.full(index);
     }
     //博客删除
-    function blog_del(obj, id) {
+    function delete_blog_label(obj, id) {
         layer.confirm('确认要删除吗？', function (index) {
             $.ajax({
                 type: 'POST',
-                url: '',
+                url: '/blog_manage/delete_blog_label',
+                data : {'blog_label_to_del_id':id},
                 dataType: 'json',
                 success: function (data) {
-                    $(obj).parents("tr").remove();
+                    //$(obj).parents("tr").remove();//TODO 修改为重绘表格
                     layer.msg('已删除!', {icon: 1, time: 1000});
                 },
                 error: function (data) {
@@ -354,7 +240,7 @@
         var title = '添加标签';
         var url = 'to_blog_laebl_manage_add';
         var w = '';
-        var h = '';
+        var h = '300';
         layer_show(title,url,w,h);
     }
 </script>

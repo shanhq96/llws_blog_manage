@@ -11,14 +11,14 @@
     <link rel="Bookmark" href="{{ url_for('static', filename='favicon.ico') }}" >
     <link rel="Shortcut Icon" href="{{ url_for('static', filename='favicon.ico') }}" />
     <!--[if lt IE 9]>
-    <script type="text/javascript" src="{{ url_for('static', filename='h-ui.admin/lib/html5shiv.js') }}" ></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='h-ui.admin/lib/respond.min.js') }}" ></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/html5shiv.js') }}" ></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/respond.min.js') }}" ></script>
     <![endif]-->
-    <link rel="stylesheet" href="{{ url_for('static', filename='h-ui.admin/static/h-ui/css/H-ui.min.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='h-ui.admin/static/h-ui.admin/css/H-ui.admin.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='h-ui.admin/lib/Hui-iconfont/1.0.8/iconfont.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='h-ui.admin/static/h-ui.admin/skin/default/skin.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='h-ui.admin/static/h-ui.admin/css/style.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='lib/h-ui.admin/static/h-ui/css/H-ui.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='lib/h-ui.admin/static/h-ui.admin/css/H-ui.admin.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='lib/h-ui.admin/lib/Hui-iconfont/1.0.8/iconfont.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='lib/h-ui.admin/static/h-ui.admin/skin/default/skin.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='lib/h-ui.admin/static/h-ui.admin/css/style.css') }}" type="text/css">
     <!--[if IE 6]>
     <script type="text/javascript" src="{{ url_for('static', filename='h-ui.admin/lib/DD_belatedPNG_0.0.8a-min.js') }}" ></script>
     <script>DD_belatedPNG.fix('*');</script>
@@ -39,15 +39,15 @@
     <link rel="Bookmark" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="Shortcut Icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
     <!--[if lt IE 9]>
-    <script type="text/javascript" src="{{ url_for('static', filename='h-ui.admin/lib/html5shiv.js') }}" ></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='h-ui.admin/lib/respond.min.js') }}" ></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/html5shiv.js') }}" ></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/respond.min.js') }}" ></script>
     <![endif]-->
-    <link rel="stylesheet" href="{{ url_for('static', filename='h-ui.admin/static/h-ui/css/H-ui.min.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='h-ui.admin/static/h-ui.admin/css/H-ui.login.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='h-ui.admin/static/h-ui.admin/css/style.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='h-ui.admin/lib/Hui-iconfont/1.0.8/iconfont.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='lib/h-ui.admin/static/h-ui/css/H-ui.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='lib/h-ui.admin/static/h-ui.admin/css/H-ui.login.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='lib/h-ui.admin/static/h-ui.admin/css/style.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='lib/h-ui.admin/lib/Hui-iconfont/1.0.8/iconfont.css') }}" type="text/css">
     <!--[if IE 6]>
-    <script type="text/javascript" src="{{ url_for('static', filename='h-ui.admin/lib/DD_belatedPNG_0.0.8a-min.js') }}" ></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/DD_belatedPNG_0.0.8a-min.js') }}" ></script>
     <script>DD_belatedPNG.fix('*');</script>
     <![endif]-->
 {% endmacro %}
@@ -55,9 +55,17 @@
 
 {% macro footer() %}
     <!--_footer 作为公共模版分离出去-->
-    <script type="text/javascript" src="{{ url_for('static', filename='h-ui.admin/lib/jquery/1.9.1/jquery.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='h-ui.admin/lib/layer/2.4/layer.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='h-ui.admin/static/h-ui/js/H-ui.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='h-ui.admin/static/h-ui.admin/js/H-ui.admin.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/jquery/1.9.1/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/layer-v3.0.3/layer.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/static/h-ui/js/H-ui.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/static/h-ui.admin/js/H-ui.admin.js') }}"></script>
+    <!--_footer 作为公共模版分离出去-->
+{% endmacro %}
+
+
+{% macro login_footer() %}
+    <!--_footer 作为公共模版分离出去-->
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/jquery/1.9.1/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/static/h-ui/js/H-ui.min.js') }}"></script>
     <!--_footer 作为公共模版分离出去-->
 {% endmacro %}

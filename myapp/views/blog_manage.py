@@ -82,15 +82,18 @@ def save_blog():
     content = form.get('content')
     info = {}
     info['title'] = title  # 标题
-    info['big_label'] = onetype  # 一级分类
-    info['small_label'] = twotype  # 二级分类
+    info['big_label_id'] = onetype  # 一级分类
+    info['big_label_name'] = onetype  # 一级分类
+    info['small_label_id'] = twotype  # 二级分类
+    info['small_label_name'] = twotype  # 二级分类
     info['content'] = content  # 内容
     info['describe'] = maincontent  # 概要
     info['is_status'] = 0  # 0未发布
-    info['create_time'] = time.time()  # 创建时间
+    info['create_time'] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))  # 创建时间
+    info['update_time'] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))  # 更新时间
     info['title_img_url'] = ''  # 标题图片
     info['hits'] = 0  # 点击次数
-    info['is_top'] = 'false'  # 是否置顶
+    info['is_top'] = False  # 是否置顶
     print(info['create_time'], info['title'])
     connection.insert_list(blog_collection, info)
 

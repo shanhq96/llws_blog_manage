@@ -1,0 +1,133 @@
+{% from '_common.html' import head,footer %}
+{{ head() }}
+<title>编辑标签 - H-ui.admin v3.0</title>
+<meta name="keywords" content="H-ui.admin v3.0,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
+<meta name="description" content="H-ui.admin v3.0，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
+</head>
+<body>
+<article class="page-container">
+	<form class="form form-horizontal" id="form" action="/blog_label_manage/edit_blog_label" method="post">
+        <div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>大标签：</label>
+			<div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+				<select class="select" size="1" name="parent_label" id="parent_label" datatype="*" nullmsg="请选择大标签">
+					<option value="0@0" selected>添加新的大标签</option>
+				</select>
+				</span>
+            </div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>标签名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="请输入标签名称" id="label_name" name="label_name" datatype="*2-10" nullmsg="请输入标签名称" errormsg="请控制在2-10字符">
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			</div>
+		</div>
+	</form>
+</article>
+
+{{ footer() }}
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="{{ url_for('static',filename='lib/h-ui.admin/lib/My97DatePicker/4.8/WdatePicker.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='lib/Validform-5.3.2/Validform_v5.3.2.js') }}"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.skin-minimal input').iCheck({
+            checkboxClass: 'icheckbox-blue',
+            radioClass: 'iradio-blue',
+            increaseArea: '20%'
+        });
+        getBigBlogLabelList();
+    });
+    //验证表单
+    var form = $('#form').Validform({
+        tiptype: function (msg, o, cssctl) {
+            //msg：提示信息;
+            //o:{obj:*,type:*,curform:*}, obj指向的是当前验证的表单元素（或表单对象），type指示提示的状态，值为1、2、3、4， 1：正在检测/提交数据，2：通过验证，3：验证失败，4：提示ignore状态, curform为当前form对象;
+            //cssctl:内置的提示信息样式控制函数，该函数需传入两个参数：显示提示信息的对象 和 当前提示的状态（既形参o中的type）;
+            if (!o.obj.is("form")) {//验证表单元素时o.obj为该表单元素，全部验证通过提交表单时o.obj为该表单对象;
+                if (o.type != 2) {
+                    layer.tips(msg, o.obj,{
+                        tips:[3,'#9999FF'],
+                        time:2000
+                    });
+                }
+            }
+        },
+        datatype: {
+            "float2": function (gets, obj, curform, regxp) {//两位有效数字
+                /*参数gets是获取到的表单元素值，obj为当前表单元素， curform为当前验证的表单，regxp为内置的一些正则表达式的引用。*/
+                var reg = /^(100|(\d{1,2}(\.\d{1,2})?))$/;
+                return reg.test(gets);
+            }
+        },
+        showAllError: false,
+        ajaxPost: false,
+        postonce: true,
+        callback: function (data) {
+            ajaxSubmitForm();
+            return false;
+        }
+    });
+
+    //异步提交表单 requireStatus:0_不申请审核 1_申请审核
+    function ajaxSubmitForm() {
+        var ajaxData =$('#form').serialize();
+        var url = $('#form').attr('action');
+        var method = $('#form').attr('method');
+        $.ajax({
+            type: method,
+            url: url,
+            data: ajaxData,
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded;charset=utf-8",
+            success: function (data) {
+                if (data.status == "success") {
+                    layer.msg('提交成功', {icon: 1});
+                    setTimeout(function () {
+                        parent.dataTableObj.api().draw();
+                        layer_close();
+                    }, 1000);
+                } else{
+                    console.log(data.status)
+                }
+            },
+            error: function (data) {
+                alert("error = " + data.msg);
+            }
+        })
+    }
+
+    //异步获取大标签列表
+    function getBigBlogLabelList() {
+        $.ajax({
+            type: "post",
+            url: "/blog_label_manage/get_big_blog_label_list",
+            data: {},
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded;charset=utf-8",
+            success: function (data) {
+                if (data.status == "success") {
+                    var str = "";
+                    for(var i=0;i<data.big_blog_labels.length;i++){
+                        var temp_big_blog_label = data.big_blog_labels[i];
+                        str += '<option value="'+temp_big_blog_label._id+'@'+temp_big_blog_label.label_name+'">'+temp_big_blog_label.label_name+'</option>\n';
+                    }
+                    $('#parent_label').append(str);
+                } else{
+                    console.log(data.status)
+                }
+            },
+            error: function (data) {
+                alert("error = " + data.msg);
+            }
+        })
+    }
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

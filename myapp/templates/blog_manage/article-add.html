@@ -119,7 +119,8 @@ $(function(){
                 if(data.status){
                     layer.msg('保存成功', {icon: 2});
                     setTimeout(function () {
-                        parent.dataTableObj.api().draw();
+                        //parent.dataTableObj.api().draw();
+                        parent.$('#btn-refresh').click();
                         layer_close();
                     }, 1000);
                 }else {

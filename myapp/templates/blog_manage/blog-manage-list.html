@@ -20,7 +20,7 @@
 		<input type="text" name="" id="" placeholder=" 资讯名称" style="width:250px" class="input-text">
 		<button name="" id="" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜资讯</button>
 	</div>
-	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a class="btn btn-primary radius"  data-href="{{ url_for('blog_manage.to_blog_add') }}" data-title="添加博客" onclick="Hui_admin_tab(this)" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加博客</a></span> <span class="r">共有数据：<strong id="totalnum">0</strong> 条</span> </div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a class="btn btn-primary radius"  data-title="添加博客" onclick="data_add()" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加博客</a></span> <span class="r">共有数据：<strong id="totalnum">0</strong> 条</span> </div>
 	<div class="mt-20">
 		<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
 			<thead>
@@ -243,6 +243,18 @@
             content: url
         });
         layer.full(index);
+
+    }
+    //添加博客
+    function data_add(){
+        var title = '添加博客';
+        var url = 'to_blog_add';
+        var s = "";
+        var w = document.body.clientWidth;
+        var h = window.innerHeight;
+{#        var w = '510';#}
+{#        var h = '600';#}
+        layer_show(title,url,w,h);
     }
     //博客删除
     function blog_del(obj, id) {

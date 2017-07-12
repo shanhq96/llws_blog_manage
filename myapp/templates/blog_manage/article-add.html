@@ -14,26 +14,18 @@
 			</div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>博客分类：</label>
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>大标签：</label>
 			<div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
-				<select name="" class="select" id="onetype">
-					<option value="0">React</option>
-					<option value="1">Mongodb</option>
-					<option value="2">Python</option>
-					<option value="3">数据挖掘</option>
-					<option value="4">机器学习</option>
+				<select name="" class="select" id="onetype" onchange="changetwotype()">
+					<option value="">请选择</option>
 				</select>
 				</span> </div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>二级分类：</label>
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>小标签：</label>
 			<div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
 				<select name="" class="select" id="twotype">
-					<option value="0">React</option>
-					<option value="1">Mongodb</option>
-					<option value="2">Python</option>
-					<option value="3">数据挖掘</option>
-					<option value="4">机器学习</option>
+					<option value="">请选择</option>
 				</select>
 				</span> </div>
 		</div>
@@ -50,7 +42,7 @@
 				<div class="uploader-thum-container">
 					<div id="fileList" class="uploader-list"></div>
 					<div id="filePicker">选择图片</div>
-					<button id="btn-star" class="btn btn-default btn-uploadstar radius ml-10">开始上传</button>
+{#					<button id="btn-star" class="btn btn-default btn-uploadstar radius ml-10">开始上传</button>#}
 				</div>
 			</div>
 		</div>
@@ -88,23 +80,34 @@
 	var ue = UE.getEditor('editor', {
         serverUrl: "/upload/"
     });
-	function getContent() {
-        var arr = [];
-        arr.push("使用editor.getContent()方法可以获得编辑器的内容");
-        arr.push("内容为：");
-        arr.push(UE.getEditor('editor').getContent());
-        alert(arr.join("\n"));
-    }
-    function getPlainTxt() {
-        var arr = [];
-        arr.push("使用editor.getPlainTxt()方法可以获得编辑器的带格式的纯文本内容");
-        arr.push("内容为：");
-        arr.push(UE.getEditor('editor').getPlainTxt());
-        alert(arr.join('\n'))
-    }
     </script>
 <script type="text/javascript">
+    var jsonstr="[";
 $(function(){
+    $.ajax({
+            type: "post",
+            url: "/blog_manage/get_taglist",
+            success: function (data) {
+                for(var i = 0;i<data.length;i++){
+                    var type = data[i].label_type;
+                    if(type==1){
+                        var one = "<option value=\""+data[i]._id+"@"+data[i].label_name+"\">"+data[i].label_name+"</option>";
+                        $('#onetype').append(one);
+                    }else if(type==2){
+                        var two = "<option value=\""+data[i]._id+"@"+data[i].label_name+"@"+data[i].parent_label_id+"\">"+data[i].label_name+"</option>";
+                        jsonstr +="{\"parentid\":\""+data[i].parent_label_id+"\",\"value\":\""+two+"\"}";
+                        $('#twotype').append(two);
+                    }
+
+                }
+{#                jsonstr.replace(/}{/,"},{");#}
+{#                jsonstr =jsonstr+"]";#}
+                console.log(data);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
     $('#submit').on("click", function () {
         $.ajax({
             type: "post",
@@ -114,12 +117,14 @@ $(function(){
             //contentType: "application/json; charset=utf-8",
             success: function (data) {
                 if(data.status){
-                    window.location.href="/blog_manage/blog-manage-list";
-                    alert("保存成功");
+                    layer.msg('保存成功', {icon: 2});
+                    setTimeout(function () {
+                        parent.dataTableObj.api().draw();
+                        layer_close();
+                    }, 1000);
                 }else {
-                    alert("保存失败");
+                    layer.msg('保存失败', {icon: 2});
                 }
-                console.log(data);
             },
             error: function (error) {
                 console.log(error);
@@ -235,7 +240,13 @@ $(function(){
 
 });
 </script>
-
+<script>
+{#    function changetwotype(){#}
+{#        var parentid = $('#onetype').val();#}
+{#        parentid = parentid.split("@")[0];#}
+{#        alert(jsonstr);#}
+{#    }#}
+</script>
 {#    <script>#}
     {# 提交表单#}
 {#        $(document).ready(function() {#}

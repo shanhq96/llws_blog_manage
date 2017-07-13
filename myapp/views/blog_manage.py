@@ -65,7 +65,6 @@ def to_blog_add():
     去博客新增页
     :return:
     """
-
     return render_template("blog_manage/article-add.html")
 
 @blog_manage.route('/get_taglist', methods=['Post', 'Get'])
@@ -223,5 +222,71 @@ def delete_blog_label():
     form = request.form
     blog_label_to_del_id = form.get('blog_label_to_del_id')
     connection.update_data(blog_label_collection,{"$or":[{"_id":ObjectId(blog_label_to_del_id)},{"parent_label_id":blog_label_to_del_id}]},{"$set":{"is_del":1}},multi=True)
+    response = get_return_response(jsonify({"status": "success"}))
+    return response
+
+@blog_manage.route('/blog_del',methods=['Post',])
+def blog_del():
+    '''
+    删除博客
+    :return:
+    '''
+    form = request.form
+    blog_opetration_id = form.get('blog_opetration_id')
+    connection.remove_one_data(blog_collection, {"_id": ObjectId(blog_opetration_id)})
+    response = get_return_response(jsonify({"status": "success"}))
+    return response
+
+
+@blog_manage.route('/blog_top',methods=['Post',])
+def blog_top():
+    '''
+    博客置顶
+    :return:
+    '''
+    form = request.form
+    blog_opetration_id = form.get('blog_opetration_id')
+    if(connection.find_data(blog_collection,{"is_top":True}).count()<3):
+        connection.update_data(blog_collection,{"_id":ObjectId(blog_opetration_id)},{"$set":{"is_top":True}},multi=True)
+        response = get_return_response(jsonify({"status": "success"}))
+    else:
+        response = get_return_response(jsonify({"status": "fail"}))
+    return response
+
+@blog_manage.route('/blog_top_cancle',methods=['Post',])
+def blog_top_cancle():
+    '''
+    取消置顶
+    :return:
+    '''
+    form = request.form
+    blog_opetration_id = form.get('blog_opetration_id')
+    connection.update_data(blog_collection,{"_id":ObjectId(blog_opetration_id)},{"$set":{"is_top":False}},multi=True)
+    response = get_return_response(jsonify({"status": "success"}))
+    return response
+
+@blog_manage.route('/blog_up',methods=['Post',])
+def blog_up():
+    '''
+    博客上架
+    :return:
+    '''
+    form = request.form
+    blog_opetration_id = form.get('blog_opetration_id')
+    connection.update_data(blog_collection, {"_id": ObjectId(blog_opetration_id)},
+                           {"$set": {"is_status": 1}}, multi=True)
+    response = get_return_response(jsonify({"status": "success"}))
+    return response
+
+@blog_manage.route('/blog_down',methods=['Post',])
+def blog_down():
+    '''
+    博客下架
+    :return:
+    '''
+    form = request.form
+    blog_opetration_id = form.get('blog_opetration_id')
+    connection.update_data(blog_collection, {"_id": ObjectId(blog_opetration_id)},
+                           {"$set": {"is_status": 2}}, multi=True)
     response = get_return_response(jsonify({"status": "success"}))
     return response

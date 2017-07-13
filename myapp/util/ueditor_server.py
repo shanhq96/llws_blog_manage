@@ -6,21 +6,21 @@ from flask import Blueprint, request, make_response
 
 from models.uploader import Uploader
 
-ueditor_server = Blueprint("ueditor_server", __name__)
+ueditor_server = Blueprint("ueditor_server", __name__,static_folder='/home/hadoop/PycharmProjects/170709/llws_blog_manage/myapp/static/lib/h-ui.admin/lib')
 
 
-@ueditor_server.route('/upload/', methods=['GET', 'POST', 'OPTIONS'])
+@ueditor_server.route('/upload', methods=['GET', 'POST', 'OPTIONS'])
 def upload():
     """UEditor文件上传接口
     config 配置文件
     result 返回结果
     """
+    print(request.args)
     mimetype = 'application/json'
     result = {}
     action = request.args.get('action')
     # 解析JSON格式的配置文件
-    with open(os.path.join(ueditor_server.static_folder, 'ueditor', 'php',
-                           'config.json')) as fp:
+    with open(os.path.join(ueditor_server.static_folder, 'ueditor','1.4.3', 'python','config.json')) as fp:
         try:
             # 删除 `/**/` 之间的注释
             CONFIG = json.loads(re.sub(r'\/\*.*\*\/', '', fp.read()))

@@ -1,25 +1,17 @@
 {% from '_common.html' import head,footer %}
 {{ head() }}
-<title>栏目管理</title>
+<title>评论管理</title>
 </head>
 <body>
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
 	<span class="c-gray en">&gt;</span>
-	系统管理
+	评论管理
 	<span class="c-gray en">&gt;</span>
-	栏目管理
+	评论列表
 	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
 </nav>
 <div class="page-container">
-	<div class="text-c">
-		<input type="text" name="" id="" placeholder="栏目名称、id" style="width:250px" class="input-text">
-		<button name="" id="" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
-	</div>
 	<div class="cl pd-5 bg-1 bk-gray mt-20">
-		<span class="l">
-		<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
-		<a class="btn btn-primary radius" onclick="system_category_add('添加资讯','system-category-add.html')" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加栏目</a>
-		</span>
 		<span class="r">共有数据：<strong>54</strong> 条</span>
 	</div>
 	<div class="mt-20">
@@ -125,6 +117,7 @@
             "columnDefs": [//列渲染
                 {
                     "targets": 0,
+                    "visible":true,
                     "render": function (data, type, row) {
                         //获取其他列数据用row[index]
                         var str = '<input type="checkbox" value="' + data + '" name="">';
@@ -140,14 +133,6 @@
     });
 </script>
 <script type="text/javascript">
-/*系统-栏目-添加*/
-function system_category_add(title,url,w,h){
-	layer_show(title,url,w,h);
-}
-/*系统-栏目-编辑*/
-function system_category_edit(title,url,id,w,h){
-	layer_show(title,url,w,h);
-}
 /*系统-栏目-删除*/
 function system_category_del(obj,id){
 	layer.confirm('确认要删除吗？',function(index){

@@ -125,12 +125,8 @@
             },
             "columnDefs": [//列渲染
                 {
-<<<<<<< HEAD
                     "targets": [0],
-=======
-                    "targets": 0,
                     "visible":true,
->>>>>>> 07f0cebc904c3aed9a42d4e671720b37afa982e6
                     "render": function (data, type, row) {
                         //获取其他列数据用row[index]
                         var str = '<input type="checkbox" value="' + data + '" name="">';
@@ -159,7 +155,6 @@
     });
 </script>
 <script type="text/javascript">
-<<<<<<< HEAD
     //添加评论
     function data_add(){
         var title = '添加评论';
@@ -195,26 +190,6 @@
         var h = '300';
         layer_show(title,url,w,h);
     }
-
-=======
-/*系统-栏目-删除*/
-function system_category_del(obj,id){
-	layer.confirm('确认要删除吗？',function(index){
-		$.ajax({
-			type: 'POST',
-			url: '',
-			dataType: 'json',
-			success: function(data){
-				$(obj).parents("tr").remove();
-				layer.msg('已删除!',{icon:1,time:1000});
-			},
-			error:function(data) {
-				console.log(data.msg);
-			},
-		});
-	});
-}
->>>>>>> 07f0cebc904c3aed9a42d4e671720b37afa982e6
 </script>
 </body>
 </html>

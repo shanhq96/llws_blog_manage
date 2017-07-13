@@ -3,6 +3,8 @@ import time
 from flask import Blueprint, request, jsonify, render_template
 import time
 # mongodb数据库连接
+from pymongo import ASCENDING, DESCENDING
+
 from connect_db.connect_mongo import ConnectMongoDB,ObjectId
 # from ueditor import UEditor
 from util.post_response import get_return_response
@@ -39,7 +41,7 @@ def get_blog_manage_list():
 
     # 查询数据库
     result_temp = connection.find_data(blog_collection)
-    result = result_temp.skip(data_start).limit(data_length)
+    result = result_temp.skip(data_start).limit(data_length).sort("is_top", DESCENDING)
 
     # 构造datables插件需要的配置数据
     response_datatables = {}

@@ -1,6 +1,8 @@
 ﻿﻿{% from '_common.html' import head,footer %}
 {{ head() }}
-
+<!-- webuploader上传插件css -->
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lib/webuploader/webuploader.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lib/webuploader/style.css') }}"/>
 <title>新增博客</title>
 </head>
 <body>
@@ -42,7 +44,43 @@
 				<div class="uploader-thum-container">
 					<div id="fileList" class="uploader-list"></div>
 					<div id="filePicker">选择图片</div>
-{#					<button id="btn-star" class="btn btn-default btn-uploadstar radius ml-10">开始上传</button>#}
+					<button id="btn-star" class="btn btn-default btn-uploadstar radius ml-10">开始上传</button>
+				</div>
+                <div id="uploader-list-container">
+                    <div class="queueList">
+                        <div id="dndArea" class="placeholder">
+                            <div id="filePicker" uploadPath="/savePic"></div>
+                            <p id="filePickerNote">或将照片拖到这里，单次最多可选1张</p>
+                        </div>
+                    </div>
+                    <div class="statusBar" style="display:none;">
+                        <div class="progress">
+                            <span class="text">0%</span>
+                            <span class="percentage"></span>
+                        </div>
+                        <div class="info"></div>
+                        <div class="btns">
+                            <div id="filePicker2"></div>
+                            <div class="uploadBtn">开始上传</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="uploader-list-container">
+					<div class="queueList">
+						<div id="dndArea" class="placeholder">
+							<div id="filePicker"></div>
+							<p>或将照片拖到这里，单次最多可选300张</p>
+						</div>
+					</div>
+					<div class="statusBar" style="display:none;">
+						<div class="progress"> <span class="text">0%</span> <span class="percentage"></span> </div>
+						<div class="info"></div>
+						<div class="btns">
+							<div id="filePicker2"></div>
+							<div class="uploadBtn">开始上传</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -62,19 +100,20 @@
 	</form>
 </article>
 
-<!--_footer 作为公共模版分离出去-->
 {{ footer() }}
+
 <script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/My97DatePicker/4.8/WdatePicker.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/jquery.validation/1.14.0/jquery.validate.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/jquery.validation/1.14.0/validate-methods.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/jquery.validation/1.14.0/messages_zh.js') }}"></script>
-<!--/_footer /作为公共模版分离出去-->
 
 <!--请在下方写此页面业务相关的脚本-->
 <script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/webuploader/0.1.5/webuploader.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/ueditor/1.4.3/ueditor.config.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/ueditor/1.4.3/ueditor.all.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='lib/webuploader/webuploader.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='lib/webuploader/upload.js') }}"></script>
 <script>
 {#    var ue = UE.getEditor('editor');#}
 	var ue = UE.getEditor('editor', {
@@ -82,12 +121,13 @@
     });
     </script>
 <script type="text/javascript">
-    var jsonstr="[";
+    var jsonsstr=[];
 $(function(){
     $.ajax({
             type: "post",
             url: "/blog_manage/get_taglist",
             success: function (data) {
+                k=0;
                 for(var i = 0;i<data.length;i++){
                     var type = data[i].label_type;
                     if(type==1){
@@ -95,13 +135,11 @@ $(function(){
                         $('#onetype').append(one);
                     }else if(type==2){
                         var two = "<option value=\""+data[i]._id+"@"+data[i].label_name+"@"+data[i].parent_label_id+"\">"+data[i].label_name+"</option>";
-                        jsonstr +="{\"parentid\":\""+data[i].parent_label_id+"\",\"value\":\""+two+"\"}";
-                        $('#twotype').append(two);
+{#                        jsonsstr +={"parectid":data[i].parent_label_id,"id":data[i]._id,"name":data[i].label_name}+",";#}
+                        jsonsstr[k] ={"parentid":data[i].parent_label_id,"id":data[i]._id,"name":data[i].label_name};
+                        k++;
                     }
-
                 }
-{#                jsonstr.replace(/}{/,"},{");#}
-{#                jsonstr =jsonstr+"]";#}
                 console.log(data);
             },
             error: function (error) {
@@ -242,11 +280,18 @@ $(function(){
 });
 </script>
 <script>
-{#    function changetwotype(){#}
-{#        var parentid = $('#onetype').val();#}
-{#        parentid = parentid.split("@")[0];#}
-{#        alert(jsonstr);#}
-{#    }#}
+    function changetwotype(){
+        var parentid = $('#onetype').val();
+        parentid = parentid.split("@")[0];
+        $('#twotype').empty();
+        $('#twotype').append("<option value=\"\">请选择</option>");
+        for(var i=0;i<jsonsstr.length;i++){
+            if(parentid==jsonsstr[i].parentid){
+                var two = "<option value=\""+jsonsstr[i].id+"@"+jsonsstr[i].name+"\">"+jsonsstr[i].name+"</option>";
+                $('#twotype').append(two);
+            }
+        }
+    }
 </script>
 {#    <script>#}
     {# 提交表单#}

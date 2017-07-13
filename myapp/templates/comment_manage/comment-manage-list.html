@@ -1,26 +1,26 @@
 {% from '_common.html' import head,footer %}
 {{ head() }}
-<title>栏目管理</title>
+<title>评论管理</title>
 </head>
 <body>
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
 	<span class="c-gray en">&gt;</span>
-	系统管理
+	评论管理
 	<span class="c-gray en">&gt;</span>
-	栏目管理
+	评论列表
 	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
 </nav>
 <div class="page-container">
-	<div class="text-c">
-		<input type="text" name="" id="" placeholder="栏目名称、id" style="width:250px" class="input-text">
-		<button name="" id="" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
-	</div>
 	<div class="cl pd-5 bg-1 bk-gray mt-20">
+<<<<<<< HEAD
 		<span class="l">
 		<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
 		<a href="javascript:;" onclick="data_add()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加评论</a></span>
 		</span>
 		<span class="r">共有数据：<strong id="totalnum">0</strong> 条</span>
+=======
+		<span class="r">共有数据：<strong>54</strong> 条</span>
+>>>>>>> 07f0cebc904c3aed9a42d4e671720b37afa982e6
 	</div>
 	<div class="mt-20">
 		<table class="table table-border table-bordered table-hover table-bg table-sort">
@@ -129,7 +129,12 @@
             },
             "columnDefs": [//列渲染
                 {
+<<<<<<< HEAD
                     "targets": [0],
+=======
+                    "targets": 0,
+                    "visible":true,
+>>>>>>> 07f0cebc904c3aed9a42d4e671720b37afa982e6
                     "render": function (data, type, row) {
                         //获取其他列数据用row[index]
                         var str = '<input type="checkbox" value="' + data + '" name="">';
@@ -158,6 +163,7 @@
     });
 </script>
 <script type="text/javascript">
+<<<<<<< HEAD
     //添加评论
     function data_add(){
         var title = '添加评论';
@@ -194,6 +200,25 @@
         layer_show(title,url,w,h);
     }
 
+=======
+/*系统-栏目-删除*/
+function system_category_del(obj,id){
+	layer.confirm('确认要删除吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: '',
+			dataType: 'json',
+			success: function(data){
+				$(obj).parents("tr").remove();
+				layer.msg('已删除!',{icon:1,time:1000});
+			},
+			error:function(data) {
+				console.log(data.msg);
+			},
+		});
+	});
+}
+>>>>>>> 07f0cebc904c3aed9a42d4e671720b37afa982e6
 </script>
 </body>
 </html>

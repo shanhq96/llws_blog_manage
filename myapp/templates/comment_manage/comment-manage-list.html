@@ -13,7 +13,6 @@
 <div class="page-container">
 	<div class="cl pd-5 bg-1 bk-gray mt-20">
 		<span class="l">
-		<a href="javascript:;" onclick="data_add()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加评论</a></span>
 		</span>
 		<span class="r">共有数据：<strong id="totalnum">0</strong> 条</span>
 	</div>
@@ -22,10 +21,10 @@
 			<thead>
 				<tr class="text-c">
 					<th width="25"><input type="checkbox" name="" value=""></th>
-                    <th width="80">用户ID</th>
-                    <th width="80">文章ID</th>
-                    <th width="160">创建时间</th>
-					<th>内容</th>
+                    <th width="80">用户登录帐号</th>
+                    <th width="80">文章名称</th>
+                    <th width="80">创建时间</th>
+					<th width="240">内容</th>
                     <th width="80">回复</th>
 					<th width="100">操作</th>
 				</tr>
@@ -95,8 +94,8 @@
                     "data": "_id",
                     "defaultContent": ""
                 },
-                {"data": "user_id"},
-                {"data": "article_id"},
+                {"data": "username"},
+                {"data": "blog_name"},
                 {"data": "create_time"},
                 {"data": "content"},
                 {"data": "response"},
@@ -125,7 +124,7 @@
             "columnDefs": [//列渲染
                 {
                     "targets": [0],
-                    "visible":true,
+                    "visible":false,
                     "render": function (data, type, row) {
                         //获取其他列数据用row[index]
                         var str = '<input type="checkbox" value="' + data + '" name="">';
@@ -133,15 +132,19 @@
                     }
                 },
                 {
+                    "targets": [-2],
+                    "visible":false
+                },
+                {
                     "targets": [-1],
                     "render": function (data, type, row) {
                         //获取其他列数据用row[index]
-                        var str = '<a style="text-decoration:none" class="ml-5" onClick="delete_comment(this,\'' + data + '\')" href="javascript:;" title="删除">'
-                        +'<i class="Hui-iconfont">&#xe6e2;</i>'
-                        +'</a>'
-                        +'<a style="text-decoration:none" class="ml-5" onClick="reply_comment(this,\'' + data + '\')" href="javascript:;" title="回复">'
-                        +'<i class="Hui-iconfont">&#xe6df;</i>'
-                        +'</a>';
+                        var str = '<a style="text-decoration:none" class="ml-5" onClick="delete_comment(this,\'' + data + '\')" href="javascript:;" title="删除">';
+                        str += '<i class="Hui-iconfont">&#xe6e2;</i>';
+                        str += '</a>';
+                        {#str += '<a style="text-decoration:none" class="ml-5" onClick="reply_comment(this,\'' + data + '\')" href="javascript:;" title="回复">';
+                        str += '<i class="Hui-iconfont">&#xe6df;</i>';
+                        str += '</a>';#}
                         return str;
                     }
                 }

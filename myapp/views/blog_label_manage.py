@@ -3,6 +3,8 @@ import time
 from flask import Blueprint, request, jsonify, render_template
 
 # mongodb数据库连接
+from pymongo import ASCENDING
+
 from connect_db.connect_mongo import ConnectMongoDB,ObjectId
 # from ueditor import UEditor
 from util.post_response import get_return_response
@@ -37,7 +39,7 @@ def get_blog_label_manage_list():
     draw = int(form.get('draw'))
 
     # 查询数据库
-    result_temp = connection.find_data(blog_label_collection, {"$and":[{"is_del":0}]})
+    result_temp = connection.find_data(blog_label_collection, {"$and":[{"is_del":0}]}).sort('label_type',ASCENDING)
     result = result_temp.skip(data_start).limit(data_length)
 
     # 构造datables插件需要的配置数据

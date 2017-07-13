@@ -130,6 +130,19 @@
                 }
             },
             {
+                "targets": [3],
+                "render": function (data, type, row) {
+                    var str = '';
+                    if(data==1){
+                        str = '大标签'
+                    }else if(data == 2){
+                        str = '小标签'
+                    }
+                    //获取其他列数据用row[index]
+                    return str;
+                }
+            },
+            {
                 "targets": [1],
                 "visible": false
             },

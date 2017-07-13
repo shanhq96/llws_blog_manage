@@ -8,10 +8,10 @@ webuploader = Blueprint("webuploader", __name__)
 
 @webuploader.route('/upload',methods=['Post',])
 def upload():
-    print('请求')
     file = request.files['file']
-    path = '/home/hadoop/PycharmProjects/170709/llws_blog_rest/myapp/static/title_imgs/'
+    path_head = '/home/hadoop/PycharmProjects/170709/llws_blog_rest/myapp'
+    path_tail = '/static/title_imgs/'
     filename = "%s%s"%(time.strftime('%Y%m%d%H%M%S', time.localtime(time.time())),file.filename[file.filename.rindex('.'):])
-    file.save(path + filename)
-    response = get_return_response(jsonify({"status": True,"data":{"title_img_url":path + filename}}))
+    file.save(path_head + path_tail + filename)
+    response = get_return_response(jsonify({"status": True,"data":{"title_img_url":path_tail + filename}}))
     return response

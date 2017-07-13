@@ -89,8 +89,7 @@
                 if (data.status == "success") {
                     layer.msg('提交成功', {icon: 1});
                     setTimeout(function () {
-                        //parent.dataTableObj.api().draw();
-                        parent.$('#btn-refresh').click();
+                        parent.location.reload();
                         layer_close();
                     }, 1000);
                 } else{

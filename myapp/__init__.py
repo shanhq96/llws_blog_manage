@@ -6,6 +6,7 @@ from views.blog_manage import blog_manage
 from views.blog_label_manage import blog_label_manage
 from views.comment_mange import comment_manage
 from util.ueditor_server import ueditor_server
+from util.webuploader import webuploader
 # [...] Initialize the app
 from flask_login import login_required, current_user
 
@@ -56,6 +57,7 @@ def run():
     app.register_blueprint(blog_label_manage, url_prefix='/blog_label_manage')
     app.register_blueprint(comment_manage, url_prefix='/comment_manage')
     app.register_blueprint(ueditor_server, url_prefix='/ueditor_server')
+    app.register_blueprint(webuploader,url_prefix='/webuploader')
     app.run(host='0.0.0.0', debug=app.config['DEBUG'])
 
 

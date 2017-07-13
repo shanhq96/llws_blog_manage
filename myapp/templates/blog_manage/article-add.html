@@ -1,8 +1,7 @@
 ﻿﻿{% from '_common.html' import head,footer %}
 {{ head() }}
 <!-- webuploader上传插件css -->
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lib/webuploader/webuploader.css') }}"/>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lib/webuploader/style.css') }}"/>
+<link href="{{ url_for('static', filename='lib/h-ui.admin/lib/webuploader/0.1.5/webuploader.css') }}" rel="stylesheet" type="text/css" />
 <title>新增博客</title>
 </head>
 <body>
@@ -34,41 +33,16 @@
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>文章摘要：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="请输入文章摘要" id="maincontent" datatype="s0-50" ignore="ignore">
+                <input type="text" class="input-text" value="" placeholder="请输入文章摘要" id="maincontent" datatype="*0-50" ignore="ignore">
 			</div>
 		</div>
-		<div class="row cl">
+        <div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">标题图片：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<div class="uploader-thum-container">
-					<div id="fileList" class="uploader-list"></div>
-					<div id="filePicker">选择图片</div>
-					<button id="btn-star" class="btn btn-default btn-uploadstar radius ml-10">开始上传</button>
-				</div>
-                <div id="uploader-list-container">
-                    <div class="queueList">
-                        <div id="dndArea" class="placeholder">
-                            <div id="filePicker" uploadPath="/savePic"></div>
-                            <p id="filePickerNote">或将照片拖到这里，单次最多可选1张</p>
-                        </div>
-                    </div>
-                    <div class="statusBar" style="display:none;">
-                        <div class="progress">
-                            <span class="text">0%</span>
-                            <span class="percentage"></span>
-                        </div>
-                        <div class="info"></div>
-                        <div class="btns">
-                            <div id="filePicker2"></div>
-                            <div class="uploadBtn">开始上传</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="uploader-list-container">
+				<div class="uploader-list-container">
 					<div class="queueList">
 						<div id="dndArea" class="placeholder">
-							<div id="filePicker"></div>
+							<div id="filePicker-2"></div>
 							<p>或将照片拖到这里，单次最多可选300张</p>
 						</div>
 					</div>
@@ -100,22 +74,14 @@
 
 {{ footer() }}
 
-<script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/My97DatePicker/4.8/WdatePicker.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/jquery.validation/1.14.0/jquery.validate.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/jquery.validation/1.14.0/validate-methods.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/jquery.validation/1.14.0/messages_zh.js') }}"></script>
-
 <!--请在下方写此页面业务相关的脚本-->
-<script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/webuploader/0.1.5/webuploader.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/My97DatePicker/4.8/WdatePicker.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/ueditor/1.4.3/ueditor.config.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/ueditor/1.4.3/ueditor.all.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js') }}"></script>
-<<<<<<< HEAD
-<script type="text/javascript" src="{{ url_for('static', filename='lib/webuploader/webuploader.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='lib/webuploader/upload.js') }}"></script>
-=======
+<script type="text/javascript" src="{{ url_for('static', filename='lib/h-ui.admin/lib/webuploader/0.1.5/webuploader.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='llws.blog/webuploader/upload.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='lib/Validform-5.3.2/Validform_v5.3.2.js') }}"></script>
->>>>>>> master
 <script>
 {#    var ue = UE.getEditor('editor');#}
 	var ue = UE.getEditor('editor', {

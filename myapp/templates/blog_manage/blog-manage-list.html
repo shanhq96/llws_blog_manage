@@ -8,13 +8,14 @@
 	<div class="text-c">
 		<button onclick="removeIframe()" class="btn btn-primary radius">关闭选项卡</button>
 	 <span class="select-box inline">
-		<select name="" class="select">
-			<option value="0">全部分类</option>
+		<select name="" id="parent_label" class="select">
+			<option value="0">请选择大标签</option>
 		</select>
-		</span> 日期范围：
+		</span>
+        {#日期范围：
 		<input type="text" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'logmax\')||\'%y-%M-%d\'}' })" id="logmin" class="input-text Wdate" style="width:120px;">
 		-
-		<input type="text" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'logmin\')}',maxDate:'%y-%M-%d' })" id="logmax" class="input-text Wdate" style="width:120px;">
+		<input type="text" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'logmin\')}',maxDate:'%y-%M-%d' })" id="logmax" class="input-text Wdate" style="width:120px;">#}
 		<input type="text" name="" id="" placeholder=" 文章名称" style="width:250px" class="input-text">
 		<button name="" id="" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
 	</div>
@@ -321,6 +322,31 @@
         });
     }
 
+    //异步获取大标签列表
+    function getBigBlogLabelList() {
+        $.ajax({
+            type: "post",
+            url: "/blog_label_manage/get_big_blog_label_list",
+            data: {},
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded;charset=utf-8",
+            success: function (data) {
+                if (data.status == "success") {
+                    var str = "";
+                    for(var i=0;i<data.big_blog_labels.length;i++){
+                        var temp_big_blog_label = data.big_blog_labels[i];
+                        str += '<option value="'+temp_big_blog_label._id+'">'+temp_big_blog_label.label_name+'</option>\n';
+                    }
+                    $('#parent_label').append(str);
+                } else{
+                    console.log(data.status)
+                }
+            },
+            error: function (data) {
+                alert("error = " + data.msg);
+            }
+        })
+    }
 </script>
 </body>
 </html>

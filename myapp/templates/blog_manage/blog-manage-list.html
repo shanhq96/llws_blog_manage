@@ -5,20 +5,20 @@
 <body>
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 博客管理 <span class="c-gray en">&gt;</span> 博客列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="page-container">
-	<div class="text-c">
+	{#<div class="text-c">
 		<button onclick="removeIframe()" class="btn btn-primary radius">关闭选项卡</button>
 	 <span class="select-box inline">
 		<select name="" id="parent_label" class="select">
 			<option value="0">请选择大标签</option>
 		</select>
 		</span>
-        {#日期范围：
+        #}{#日期范围：
 		<input type="text" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'logmax\')||\'%y-%M-%d\'}' })" id="logmin" class="input-text Wdate" style="width:120px;">
 		-
-		<input type="text" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'logmin\')}',maxDate:'%y-%M-%d' })" id="logmax" class="input-text Wdate" style="width:120px;">#}
-		<input type="text" name="" id="" placeholder=" 文章名称" style="width:250px" class="input-text">
-		<button name="" id="" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
-	</div>
+		<input type="text" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'logmin\')}',maxDate:'%y-%M-%d' })" id="logmax" class="input-text Wdate" style="width:120px;">#}{#
+		<input type="text" name="" id="title" placeholder=" 文章名称" style="width:250px" class="input-text">
+		<button name="" id="" class="btn btn-success" onclick="searchTheData()"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+	</div>#}
 	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a class="btn btn-primary radius"  data-title="添加博客" onclick="data_add()" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加博客</a></span> <span class="r">共有数据：<strong id="totalnum">0</strong> 条</span> </div>
 	<div class="mt-20">
 		<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
@@ -86,9 +86,14 @@
         "ajax": $.fn.dataTable.pipeline({
             "url": 'get_blog_manage_list?now=' + new Date().getTime(),
             "method": "post",
-            "data": {},
+            "data": {"big_label_id":$('#parent_label').val(),"title":$('#title').val()},
             "pages": 5 // number of pages to cache
         }),
+        {#"ajax": {
+            "type":"post",
+            "url": 'get_blog_manage_list?now=' + new Date().getTime()+'&big_label_id='+$('#parent_label').val()+'&title='+$('#title').val()
+            "data": {"big_label_id":$('#parent_label').val(),"title":$('#title').val()}
+        },#}
         "createdRow": function (row, data, index) {
             $(row).attr("class", "text-c");
             //行创建回调,优于行绘制回调
@@ -214,7 +219,7 @@
 </script>
 <script type="text/javascript">
     $(function () {
-
+        //getBigBlogLabelList();
     });
     //添加博客
     function data_add(){
@@ -332,12 +337,12 @@
             contentType: "application/x-www-form-urlencoded;charset=utf-8",
             success: function (data) {
                 if (data.status == "success") {
-                    var str = "";
+                    var str = '<option value="0">请选择大标签</option>\n';
                     for(var i=0;i<data.big_blog_labels.length;i++){
                         var temp_big_blog_label = data.big_blog_labels[i];
                         str += '<option value="'+temp_big_blog_label._id+'">'+temp_big_blog_label.label_name+'</option>\n';
                     }
-                    $('#parent_label').append(str);
+                    $('#parent_label').html(str);
                 } else{
                     console.log(data.status)
                 }
@@ -346,6 +351,12 @@
                 alert("error = " + data.msg);
             }
         })
+    }
+
+    //搜索按钮
+    function searchTheData() {
+        console.log({"big_label_id":$('#parent_label').val(),"title":$('#title').val()});
+        dataTableObj.api().draw();
     }
 </script>
 </body>

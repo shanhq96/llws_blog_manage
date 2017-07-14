@@ -36,11 +36,20 @@ def get_blog_manage_list():
     form = request.form
     data_start = int(form.get('start'))
     data_length = int(form.get('length'))
+    #big_label_id = form.get('big_label_id')
+    #title = form.get('title')
     currentPage = data_start / data_length + 1
     draw = int(form.get('draw'))
 
-    # 查询数据库
+    # if(big_label_id != '0' and title != ''):
+    #     result_temp = connection.find_data(blog_collection,{'$and':[{'big_label_id':ObjectId(big_label_id)},{'title':{'$regex':title}}]})
+    # elif(big_label_id != '0' and title == ''):
+    #     result_temp = connection.find_data(blog_collection,{'big_label_id':ObjectId(big_label_id)})
+    # elif(big_label_id == '0' and title != ''):
+    #     result_temp = connection.find_data(blog_collection,{'title':{'$regex':title}})
+    # else:
     result_temp = connection.find_data(blog_collection)
+    # 查询数据库
     result = result_temp.skip(data_start).limit(data_length).sort(
         [("is_top", DESCENDING), ("hits",DESCENDING),("update_time", DESCENDING), ("title", ASCENDING),('is_status',ASCENDING)])
 
